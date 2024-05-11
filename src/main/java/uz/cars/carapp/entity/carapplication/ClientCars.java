@@ -29,7 +29,7 @@ public class ClientCars {
     @JoinColumn(name = "users_id", insertable = false, updatable = false)
     private Users users;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "clientCars", fetch = FetchType.LAZY)
     private Set<CarParams> carParams;
 
     @Column(name = "car_number")
