@@ -1,6 +1,7 @@
 package uz.cars.carapp.service.carapplication;
 
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,27 +21,27 @@ public class CarsService implements CarServiceInt {
     private final CarsDataRepository carsDataRepository;
 
     @Override
-    public Page<ClientCars> cars_list(int page, int size) {
+    public Page<ClientCars> cars_list(int page, int size, String param) {
         Pageable pageable = PageRequest.of(page, size);
 
         Specification<ClientCars> specification = (root, query, criteriaBuilder) -> {
-            root.fetch("users", JoinType.LEFT);
-            root.fetch("carParams", JoinType.LEFT);
+            if (query.getResultType() != Long.class) {
+                root.fetch("users", JoinType.LEFT);
+                root.fetch("carParams", JoinType.LEFT);
+            }
+            if (param == null || param.equals("")){
+                return null;
+            }
+            Predicate predicate1 = criteriaBuilder.like(root.get("carNumber"), '%'+param.toUpperCase()+'%');
+            return criteriaBuilder.and(predicate1);
 
-            return null;
         };
 
         return carsRepository.findAll(specification, pageable);
     }
 
     @Override
-    public DataTablesOutput<ClientCars> cars_data_list(DataTablesInput dataTablesInput) {
-        Specification<ClientCars> specification = (root, query, criteriaBuilder) -> {
-            root.fetch("users", JoinType.LEFT);
-            root.fetch("carParams", JoinType.LEFT);
-
-            return null;
-        };
+    public DataTablesOutput<ClientCars> cars_data_list(DataTablesInput dataTablesInput, String param) {
 
         return carsDataRepository.findAll(
                 dataTablesInput,
@@ -50,7 +51,11 @@ public class CarsService implements CarServiceInt {
                         root.fetch("users", JoinType.LEFT);
                         root.fetch("carParams", JoinType.LEFT);
                     }
-                    return null;
+                    if (param == null || param.equals("")){
+                        return null;
+                    }
+                    Predicate predicate1 = criteriaBuilder.like(root.get("carNumber"), '%'+param.toUpperCase()+'%');
+                    return criteriaBuilder.and(predicate1);
                 }
         );
     }
