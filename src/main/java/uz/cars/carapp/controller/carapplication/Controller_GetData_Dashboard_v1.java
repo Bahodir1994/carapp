@@ -19,10 +19,14 @@ public class Controller_GetData_Dashboard_v1 {
     public ResponseEntity<Object> get_data_v1(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Object searchparam,
             DataTablesInput dataTableInput
     ) {
         dataTableInput.setLength(size);
         dataTableInput.setStart(page);
-        return ResponseEntity.ok().body(carsService.cars_data_list(dataTableInput));
+        if (searchparam == null){
+            searchparam = "";
+        }
+        return ResponseEntity.ok().body(carsService.cars_list(page, size, String.valueOf(searchparam)));
     }
 }
