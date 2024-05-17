@@ -15,17 +15,24 @@ public class KCRoleConverter implements Converter<Jwt, Collection<GrantedAuthori
 
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
-        Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+        Map<String, Object> resourceAccess = (Map<String, Object>) jwt.getClaims().get("resource_access");
 
-        if (realmAccess == null || realmAccess.isEmpty()) {
+        if (resourceAccess == null || resourceAccess.isEmpty()) {
             return new ArrayList<>();
         }
 
-        Collection<GrantedAuthority> returnValue = (((List<String>) realmAccess.get("roles"))
-                .stream()).map(roleName -> "ROLE_" + roleName)
+        List<String> carAppRoles = (List<String>) ((Map<String, Object>) resourceAccess.get("carapp-clientv1")).get("roles");
+
+        if (carAppRoles == null || carAppRoles.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Collection<GrantedAuthority> returnValue = carAppRoles.stream()
+                .map(roleName -> "ROLE_" + roleName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         return returnValue;
     }
+
 }

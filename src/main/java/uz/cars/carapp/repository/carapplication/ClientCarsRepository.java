@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import uz.cars.carapp.entity.carapplication.ClientCars;
 
 @Repository
-public interface CarsRepository extends JpaRepository<ClientCars, String>{
+public interface ClientCarsRepository extends JpaRepository<ClientCars, String>{
     Page<ClientCars> findAll(Pageable pageable);
 
     Page<ClientCars> findAll(Specification<ClientCars> specification, Pageable pageable);
