@@ -31,10 +31,17 @@ public class Controller_Products_v1 {
         return ResponseEntity.ok().body(clientService.master_clients_list(page, size, String.valueOf(searchparam), jwt));
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('master')")
+    public ResponseEntity<Object> get_data_v2(
+            @PathVariable(name = "id") String id
+    ){
+        return ResponseEntity.ok().body(clientService.get_car_detail_by_client_id(id));
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('master')")
-    public ResponseEntity<Object> get_data_v1(
+    public ResponseEntity<Object> post_data_v1(
             @RequestBody ResponseDto_v1 responseDtoV1,
             @AuthenticationPrincipal Jwt jwt
     ) throws Throwable {

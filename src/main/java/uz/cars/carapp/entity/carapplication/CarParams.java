@@ -49,11 +49,17 @@ public class CarParams {
     private String fillingVolume; // объем заливки
 
     @Column(name = "oil_filter")
-    private String oilFilter; // фильтр маслянный
+    private Boolean oilFilter; // фильтр маслянный
+
+    @Column(name = "fuel_filter")
+    private Boolean fuelFilter; // фильтр топливо
 
     @Column(name = "air_filter")
-    private String airFilter; // фильтр воздушный
+    private Boolean airFilter; // фильтр воздушный
 
     @Column(name = "salon_filter")
-    private String salonFilter; // фильтр салонный
+    private Boolean salonFilter; // фильтр салонный
+
+    @Column(name = "pampers_filter")
+    private Boolean pampersFilter; // фильтр памперс
 }

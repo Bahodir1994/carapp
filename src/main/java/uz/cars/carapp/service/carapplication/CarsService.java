@@ -15,6 +15,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import uz.cars.carapp.entity.authorization.Users;
 import uz.cars.carapp.entity.carapplication.ClientCars;
+import uz.cars.carapp.repository.authorization.UsersRepository;
+import uz.cars.carapp.repository.carapplication.CarParamsRepository;
 import uz.cars.carapp.repository.carapplication.CarsDataRepository;
 import uz.cars.carapp.repository.carapplication.ClientCarsRepository;
 
@@ -32,6 +34,8 @@ public class CarsService implements CarServiceInt {
                 Fetch<ClientCars, Users> fetch1 = root.fetch("users", JoinType.LEFT);
                 root.fetch("carParams", JoinType.LEFT);
                 fetch1.fetch("userChild", JoinType.LEFT);
+                fetch1.fetch("roles", JoinType.LEFT);
+
             }
             Join<ClientCars, Users> userChildJoin = root.join("users").join("userChild", JoinType.LEFT);
 
@@ -67,4 +71,5 @@ public class CarsService implements CarServiceInt {
                 }
         );
     }
+
 }

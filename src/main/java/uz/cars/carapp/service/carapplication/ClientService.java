@@ -3,6 +3,7 @@ package uz.cars.carapp.service.carapplication;
 import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,12 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import uz.cars.carapp.entity.authorization.Roles;
 import uz.cars.carapp.entity.authorization.Users;
+import uz.cars.carapp.entity.carapplication.CarParams;
 import uz.cars.carapp.entity.carapplication.ClientCars;
 import uz.cars.carapp.repository.authorization.UsersRepository;
 import uz.cars.carapp.repository.carapplication.ClientCarsRepository;
 import uz.cars.carapp.service.helperClasses.ResponseDto_v1;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,8 +35,12 @@ public class ClientService implements ClientServiceInt {
 
         Specification<Users> specification_v1 = (root, query, criteriaBuilder) -> {
             Fetch<Users, Users> fetch1 = root.fetch("userChild", JoinType.LEFT);
+            Fetch<Users, Roles> fetch2 = root.fetch("roles", JoinType.LEFT);
             Join<Users, Users> join1 = (Join<Users, Users>) fetch1;
-            return criteriaBuilder.equal(join1.get("id"), master_user_id);
+            Predicate predicate1 = criteriaBuilder.equal(join1.get("id"), master_user_id);
+            Predicate predicate2 = criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), "%" + param.toLowerCase() + "%");
+            Predicate predicate3 = criteriaBuilder.like(criteriaBuilder.lower(root.get("phone")), "%" + param.toLowerCase() + "%");
+            return criteriaBuilder.and(predicate1, criteriaBuilder.or(predicate2, predicate3));
         };
 
         Pageable pageable = PageRequest.of(page, size);
@@ -71,7 +79,18 @@ public class ClientService implements ClientServiceInt {
     }
 
     @Override
-    public Object get_car_detail_by_client_id() {
-        return null;
+    public List<ClientCars> get_car_detail_by_client_id(String id) {
+        Specification<ClientCars> specification = (root, query, criteriaBuilder) -> {
+            Fetch<ClientCars, Users> fetch1 = root.fetch("users", JoinType.LEFT);
+            Fetch<Users, Roles> fetch2 = fetch1.fetch("roles", JoinType.LEFT);
+            Fetch<ClientCars, CarParams> fetch3 = root.fetch("carParams", JoinType.LEFT);
+
+            Join<ClientCars, Users> join1 = (Join<ClientCars, Users>) fetch1;
+
+            Predicate predicate1 = criteriaBuilder.equal(join1.get("id"), id);
+            return criteriaBuilder.and(predicate1);
+        };
+
+        return clientCarsRepository.findAll(specification);
     }
 }

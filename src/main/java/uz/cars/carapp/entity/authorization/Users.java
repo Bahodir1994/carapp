@@ -41,7 +41,7 @@ public class Users implements Serializable {
     @Column(name = "phone", length = 20, unique = true)
     private String phone;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @OrderBy("id ASC")
     @JoinTable(
             name = "user_roles", schema = "car_block",
