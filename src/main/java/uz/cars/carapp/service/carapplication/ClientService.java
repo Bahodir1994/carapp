@@ -48,6 +48,23 @@ public class ClientService implements ClientServiceInt {
     }
 
     @Override
+    public List<Users> master_clients_list_no_page(String param, Jwt jwt) {
+        var master_user_id = jwt.getSubject();
+
+        Specification<Users> specification_v1 = (root, query, criteriaBuilder) -> {
+            Fetch<Users, Users> fetch1 = root.fetch("userChild", JoinType.LEFT);
+            Fetch<Users, Roles> fetch2 = root.fetch("roles", JoinType.LEFT);
+            Join<Users, Users> join1 = (Join<Users, Users>) fetch1;
+            Predicate predicate1 = criteriaBuilder.equal(join1.get("id"), master_user_id);
+            Predicate predicate2 = criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), "%" + param.toLowerCase() + "%");
+            Predicate predicate3 = criteriaBuilder.like(criteriaBuilder.lower(root.get("phone")), "%" + param.toLowerCase() + "%");
+            return criteriaBuilder.and(predicate1, criteriaBuilder.or(predicate2, predicate3));
+        };
+
+        return usersRepository.findAll(specification_v1);
+    }
+
+    @Override
     public void save_master_clients(ResponseDto_v1 responseDtoV1, Jwt jwt) throws Throwable {
         var master_user_id = jwt.getSubject();
         Optional<Users> masterUser = usersRepository.findById(master_user_id);

@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -62,4 +63,10 @@ public class CarParams {
 
     @Column(name = "pampers_filter")
     private Boolean pampersFilter; // фильтр памперс
+
+    @Column(name = "service_charge")
+    private BigDecimal serviceCharge; // плата за обслуживание
+
+    @Column(name = "is_actually")
+    private Boolean isActually; // это последный статус
 }

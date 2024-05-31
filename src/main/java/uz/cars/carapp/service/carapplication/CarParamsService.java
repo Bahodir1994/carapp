@@ -19,12 +19,17 @@ public class CarParamsService implements CarParamsInt{
     @Override
     public void save_car_params_by_user_id(ResponseDto_v2 responseDtoV2) {
         CarParams carParams = new CarParams();
-        carParams.setClientCars(clientCarsRepository.findById(responseDtoV2.getCarId()).orElse(new ClientCars()));
 
+        ClientCars clientCars = clientCarsRepository.findById(responseDtoV2.getCarId()).orElse(new ClientCars());
+        carParamsRepository.updateAllByClientCars(clientCars, false);
+
+        carParams.setClientCars(clientCars);
         carParams.setMileage(Double.parseDouble(responseDtoV2.getCurrentDistance()));
-        carParams.setToMileage(Double.parseDouble(responseDtoV2.getCurrentDistance()));
+        carParams.setToMileage(Double.parseDouble(responseDtoV2.getDistanceTo()));
         carParams.setOilModel(responseDtoV2.getOilType());
         carParams.setFillingVolume(responseDtoV2.getOilQuantity());
+        carParams.setServiceCharge(responseDtoV2.getServiceChargeBigDecimal());
+        carParams.setIsActually(true);
 
         List<String> filters = responseDtoV2.getFilters();
         if (filters != null) {

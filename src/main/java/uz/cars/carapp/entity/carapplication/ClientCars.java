@@ -26,7 +26,7 @@ public class ClientCars {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id", insertable = false, updatable = false)
+    @JoinColumn(name = "users_id")
     private Users users;
 
     @OneToMany(mappedBy = "clientCars", fetch = FetchType.LAZY)

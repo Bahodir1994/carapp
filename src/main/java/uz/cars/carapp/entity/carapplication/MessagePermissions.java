@@ -1,5 +1,6 @@
 package uz.cars.carapp.entity.carapplication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +29,16 @@ public class MessagePermissions {
     @JoinColumn(name = "message_id", insertable = false, updatable = false)
     private MessageUsers messageUsers;
 
+    @Column(name = "message_id")
+    private String messageId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Users users;
+
+    @Column(name = "users_id")
+    private String userId;
 
     @CreatedDate
     @Column(name = "read_time", columnDefinition = " timestamp default current_timestamp", updatable = false)

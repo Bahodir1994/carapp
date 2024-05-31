@@ -25,6 +25,7 @@ public class Controller_Dashboard_v1 {
     public ResponseEntity<Object> get_data_v1(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) int draw,
             @RequestParam(required = false) Object searchparam,
             @AuthenticationPrincipal Jwt jwt
             ) {
@@ -40,6 +41,7 @@ public class Controller_Dashboard_v1 {
     public ResponseEntity<Object> get_data_v2(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) int draw,
             @RequestParam(required = false) Object searchparam,
             @AuthenticationPrincipal Jwt jwt
             ) {

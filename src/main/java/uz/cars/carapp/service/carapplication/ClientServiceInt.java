@@ -12,6 +12,8 @@ public interface ClientServiceInt {
 
     Page<Users> master_clients_list(int page, int size, String param, Jwt jwt);
 
+    List<Users> master_clients_list_no_page(String param, Jwt jwt);
+
     void save_master_clients(ResponseDto_v1 responseDtoV1, Jwt jwt) throws Throwable;
 
     void save_client_cars(String carType, String carNumber, String carColor, Users users);

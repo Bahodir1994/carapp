@@ -1,5 +1,6 @@
 package uz.cars.carapp.entity.carapplication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,11 @@ public class MessageUsers {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Users users;
+
+    @Column(name = "users_id")
+    private String userId;
 
     @Column(name = "message", length = 1800)
     private String message;
