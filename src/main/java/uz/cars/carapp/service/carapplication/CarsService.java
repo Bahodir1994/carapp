@@ -14,7 +14,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import uz.cars.carapp.entity.authorization.Users;
+import uz.cars.carapp.entity.carapplication.CarParams;
 import uz.cars.carapp.entity.carapplication.ClientCars;
+import uz.cars.carapp.entity.carapplication.Payment;
 import uz.cars.carapp.repository.authorization.UsersRepository;
 import uz.cars.carapp.repository.carapplication.CarParamsRepository;
 import uz.cars.carapp.repository.carapplication.CarsDataRepository;
@@ -32,7 +34,8 @@ public class CarsService implements CarServiceInt {
         Specification<ClientCars> specification_user_rsh = (root, query, criteriaBuilder) -> {
             if (query.getResultType() != Long.class) {
                 Fetch<ClientCars, Users> fetch1 = root.fetch("users", JoinType.LEFT);
-                root.fetch("carParams", JoinType.LEFT);
+                Fetch<ClientCars, CarParams> fetch2 = root.fetch("carParams", JoinType.LEFT);
+                Fetch<CarParams, Payment> fetch3 = fetch2.fetch("payments", JoinType.LEFT);
                 fetch1.fetch("userChild", JoinType.LEFT);
                 fetch1.fetch("roles", JoinType.LEFT);
 

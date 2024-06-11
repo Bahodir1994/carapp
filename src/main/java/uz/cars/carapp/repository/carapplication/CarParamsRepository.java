@@ -1,5 +1,7 @@
 package uz.cars.carapp.repository.carapplication;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,4 +24,6 @@ public interface CarParamsRepository extends JpaRepository<CarParams, String> {
     @Transactional
     @Query("UPDATE CarParams e SET e.isActually = :isActually WHERE e.clientCars = :clientCars")
     void updateAllByClientCars(@Param("clientCars") ClientCars clientCars, @Param("isActually") boolean isActually);
+
+    Page<CarParams> findAll(Specification<CarParams> specification_v1, Pageable pageable);
 }

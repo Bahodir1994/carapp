@@ -13,6 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "car_params", schema = "car_block")
@@ -29,8 +30,10 @@ public class CarParams {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    @JsonIgnore
     private ClientCars clientCars;
+
+    @OneToMany(mappedBy = "carParams", fetch = FetchType.LAZY)
+    private Set<Payment> payments;
 
     @CreatedDate
     @Column(name = "ins_time", columnDefinition = " timestamp default current_timestamp", updatable = false)

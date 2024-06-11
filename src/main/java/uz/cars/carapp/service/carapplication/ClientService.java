@@ -15,6 +15,7 @@ import uz.cars.carapp.entity.authorization.Roles;
 import uz.cars.carapp.entity.authorization.Users;
 import uz.cars.carapp.entity.carapplication.CarParams;
 import uz.cars.carapp.entity.carapplication.ClientCars;
+import uz.cars.carapp.entity.carapplication.Payment;
 import uz.cars.carapp.repository.authorization.UsersRepository;
 import uz.cars.carapp.repository.carapplication.ClientCarsRepository;
 import uz.cars.carapp.service.helperClasses.ResponseDto_v1;
@@ -101,6 +102,7 @@ public class ClientService implements ClientServiceInt {
             Fetch<ClientCars, Users> fetch1 = root.fetch("users", JoinType.LEFT);
             Fetch<Users, Roles> fetch2 = fetch1.fetch("roles", JoinType.LEFT);
             Fetch<ClientCars, CarParams> fetch3 = root.fetch("carParams", JoinType.LEFT);
+            Fetch<CarParams, Payment> fetch4 = fetch3.fetch("payments", JoinType.LEFT);
 
             Join<ClientCars, Users> join1 = (Join<ClientCars, Users>) fetch1;
 

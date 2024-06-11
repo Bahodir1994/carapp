@@ -19,11 +19,18 @@ public class ResponseDto_v2 {
     private String oilType;
     private String oilQuantity;
     private String serviceCharge;
+    private String payedCharge;
     private List<String> filters;
 
     public BigDecimal getServiceChargeBigDecimal() {
         if (this.serviceCharge != null && !this.serviceCharge.equals("")){
             return new BigDecimal(this.serviceCharge);
+        }else return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPayedChargeBigDecimal() {
+        if (this.payedCharge != null && !this.payedCharge.equals("")){
+            return new BigDecimal(this.payedCharge);
         }else return BigDecimal.ZERO;
     }
 }
